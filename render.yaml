@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: nestack-webhook-engine
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python worker.py & python api.py
+    healthCheckPath: /health
+    envVars:
+      - key: WEBHOOK_SIGNING_SECRET
+        generateValue: true
+      - key: WEBHOOK_DATABASE
+        value: /opt/render/project/src/data/webhooks.db
+    disk:
+      name: webhook-data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1
